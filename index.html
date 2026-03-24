@@ -91,9 +91,15 @@
             <label for="nome-base" class="block text-sm font-medium text-gray-200">Nome da Base <span
                 class="text-red-400">*</span></label>
             <div class="mt-2">
-              <input type="text" id="nome-base" name="nome-base" required
-                class="block w-full bg-white/5 backdrop-blur-sm rounded-md border border-white/20 py-2.5 px-3 text-white shadow-sm placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-white/50 focus:border-transparent sm:text-sm sm:leading-6 transition-colors"
-                placeholder="Ex: Base Central - SP">
+              <select id="nome-base" name="nome-base" required
+                class="block w-full bg-white/5 backdrop-blur-sm rounded-md border border-white/20 py-2.5 px-3 text-white shadow-sm focus:ring-2 focus:ring-inset focus:ring-white/50 focus:border-transparent sm:text-sm sm:leading-6 transition-colors appearance-none" style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 0.7rem top 50%; background-size: 0.65rem auto;">
+                <option value="" disabled selected class="bg-gray-900 text-gray-400">Selecione a base...</option>
+                <option value="RJ" class="bg-gray-900 text-white">RJ</option>
+                <option value="SP" class="bg-gray-900 text-white">SP</option>
+                <option value="MG" class="bg-gray-900 text-white">MG</option>
+                <option value="ES" class="bg-gray-900 text-white">ES</option>
+                <option value="PR" class="bg-gray-900 text-white">PR</option>
+              </select>
             </div>
           </div>
 
@@ -101,14 +107,9 @@
             <label for="auditor" class="block text-sm font-medium text-gray-200">Nome do Responsável <span
                 class="text-red-400">*</span></label>
             <div class="mt-2">
-              <select id="auditor" name="auditor" required
-                class="block w-full bg-white/5 backdrop-blur-sm rounded-md border border-white/20 py-2.5 px-3 text-white shadow-sm focus:ring-2 focus:ring-inset focus:ring-white/50 focus:border-transparent sm:text-sm sm:leading-6 transition-colors appearance-none" style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 0.7rem top 50%; background-size: 0.65rem auto;">
-                <option value="" disabled selected class="bg-gray-900 text-gray-400">Selecione o responsável...</option>
-                <option value="joao_costa" class="bg-gray-900 text-white">João Costa</option>
-                <option value="maria_silva" class="bg-gray-900 text-white">Maria Silva</option>
-                <option value="fernando_souza" class="bg-gray-900 text-white">Fernando Souza</option>
-                <option value="amanda_oliveira" class="bg-gray-900 text-white">Amanda Oliveira</option>
-              </select>
+              <input type="text" id="auditor" name="auditor" required
+                class="block w-full bg-white/5 backdrop-blur-sm rounded-md border border-white/20 py-2.5 px-3 text-white shadow-sm placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-white/50 focus:border-transparent sm:text-sm sm:leading-6 transition-colors"
+                placeholder="Ex: João da Silva">
             </div>
           </div>
         </div>
