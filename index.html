@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema de Auditoria Logística</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/img/logo.png" />
+  <!-- Fonte Inter do Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    /* Para remover fundo branco ao preencher automático no Chrome */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus, 
+    input:-webkit-autofill:active{
+        -webkit-box-shadow: 0 0 0 30px transparent inset !important;
+        -webkit-text-fill-color: white !important;
+        transition: background-color 5000s ease-in-out 0s;
+    }
+  </style>
+</head>
+
+<body class="flex flex-col min-h-screen relative overflow-x-hidden text-white">
+
+  <!-- Modal / Popup de Boas-Vindas Glassmorphism -->
+  <div id="welcome-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 transition-opacity duration-300">
+    <div class="max-w-xl w-full bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl overflow-hidden transform transition-all">
+      <div class="p-6 sm:p-8">
+        <h2 class="text-2xl font-bold text-white mb-4">Bem-vindo à Auditoria de Base</h2>
+        <p class="text-gray-300 mb-6 text-sm leading-relaxed">Siga o passo a passo abaixo para garantir que o envio da sua auditoria seja válido e processado rapidamente:</p>
+        
+        <ul class="space-y-4 mb-8">
+          <li class="flex items-start">
+            <span class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-white/20 text-white text-xs font-bold mr-3 mt-0.5 border border-white/30">1</span>
+            <p class="text-gray-200 text-sm"><strong>Identificação:</strong> Selecione o <span class="text-white font-medium">Nome da Base</span> exato e o <span class="text-white font-medium">Responsável</span> que realizou a conferência física.</p>
+          </li>
+          <li class="flex items-start">
+            <span class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-white/20 text-white text-xs font-bold mr-3 mt-0.5 border border-white/30">2</span>
+            <p class="text-gray-200 text-sm"><strong>Vídeo de Estoque:</strong> Envie um vídeo contínuo em formato de vídeo mostrando o ambiente e a estrutura de armazenagem.</p>
+          </li>
+          <li class="flex items-start">
+            <span class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-white/20 text-white text-xs font-bold mr-3 mt-0.5 border border-white/30">3</span>
+            <p class="text-gray-200 text-sm"><strong>Patrimônios e Liberações:</strong> Anexe os arquivos no formato <span class="text-white font-medium">.pdf</span>, contendo as assinaturas legíveis e de boa qualidade.</p>
+          </li>
+          <li class="flex items-start">
+            <span class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-white/20 text-white text-xs font-bold mr-3 mt-0.5 border border-white/30">4</span>
+            <p class="text-gray-200 text-sm"><strong>Relatórios em Excel:</strong> Insira planilhas nos formatos <span class="text-white font-medium">.xls</span> ou <span class="text-white font-medium">.xlsx</span> de seriais e conferência de NFs.</p>
+          </li>
+        </ul>
+        
+        <button id="close-modal-btn" type="button" class="w-full rounded-lg bg-white/20 hover:bg-white/30 border border-white/30 px-4 py-3 text-sm font-semibold text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-200 backdrop-blur-sm">
+          Entendi, começar preenchimento
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Imagem de Fundo Premium - Logística e Telecomunicações -->
+  <div class="fixed inset-0 z-[-1] pointer-events-none"
+    style="background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url('/img/premium_bg.png'); background-size: cover; background-position: center; background-repeat: no-repeat; filter: blur(8px); transform: scale(1.05);">
+  </div>
+
+  <!-- Cabeçalho Glassmorphism -->
+  <header class="bg-black/30 backdrop-blur-md border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <!-- Logo -->
+        <img src="/img/logo.png" alt="Logo FFA" class="h-8 w-auto object-contain rounded-sm filter brightness-0 invert" />
+        <h1 class="text-xl font-bold tracking-tight text-white">FFA INFRAESTRUTURA</h1>
+      </div>
+      <div class="text-sm font-medium text-gray-300 hidden md:block">Portal Corporativo - Auditoria Logística</div>
+    </div>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main class="flex-grow flex items-center justify-center p-4 sm:p-6 lg:p-8">
+    <div class="max-w-3xl w-full bg-white/10 backdrop-blur-xl rounded-xl shadow-2xl border border-white/20 overflow-hidden">
+
+      <!-- Corpo do Formulário -->
+      <form id="audit-form" class="p-6 sm:p-8 space-y-8">
+
+        <!-- Seção de Dados Gerais -->
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div>
+            <label for="nome-base" class="block text-sm font-medium text-gray-200">Nome da Base <span
+                class="text-red-400">*</span></label>
+            <div class="mt-2">
+              <input type="text" id="nome-base" name="nome-base" required
+                class="block w-full bg-white/5 backdrop-blur-sm rounded-md border border-white/20 py-2.5 px-3 text-white shadow-sm placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-white/50 focus:border-transparent sm:text-sm sm:leading-6 transition-colors"
+                placeholder="Ex: Base Central - SP">
+            </div>
+          </div>
+
+          <div>
+            <label for="auditor" class="block text-sm font-medium text-gray-200">Nome do Responsável <span
+                class="text-red-400">*</span></label>
+            <div class="mt-2">
+              <select id="auditor" name="auditor" required
+                class="block w-full bg-white/5 backdrop-blur-sm rounded-md border border-white/20 py-2.5 px-3 text-white shadow-sm focus:ring-2 focus:ring-inset focus:ring-white/50 focus:border-transparent sm:text-sm sm:leading-6 transition-colors appearance-none" style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 0.7rem top 50%; background-size: 0.65rem auto;">
+                <option value="" disabled selected class="bg-gray-900 text-gray-400">Selecione o responsável...</option>
+                <option value="joao_costa" class="bg-gray-900 text-white">João Costa</option>
+                <option value="maria_silva" class="bg-gray-900 text-white">Maria Silva</option>
+                <option value="fernando_souza" class="bg-gray-900 text-white">Fernando Souza</option>
+                <option value="amanda_oliveira" class="bg-gray-900 text-white">Amanda Oliveira</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <hr class="border-white/10">
+
+        <!-- Seção de Uploads -->
+        <div>
+          <h3 class="text-base font-semibold text-white mb-4 shadow-sm">Documentação e Comprovações</h3>
+          <div class="space-y-4">
+
+            <!-- 1. Vídeo do Estoque -->
+            <div class="grid sm:grid-cols-3 gap-2 sm:items-center p-3 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/10">
+              <div class="sm:col-span-1">
+                <label for="video-estoque" class="block text-sm font-medium text-gray-200">1. Vídeo do Estoque</label>
+                <p class="text-xs text-gray-400 mt-0.5">Apenas vídeos</p>
+              </div>
+              <div class="sm:col-span-2">
+                <input type="file" id="video-estoque" accept="video/*"
+                  class="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-white/20 file:text-white hover:file:bg-white/30 border border-white/20 rounded-md shadow-sm h-full items-center pl-0 cursor-pointer transition-all duration-200 ease-in-out bg-white/5 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-white/50">
+              </div>
+            </div>
+
+            <!-- 2. PDF Patrimônio Aniel -->
+            <div class="grid sm:grid-cols-3 gap-2 sm:items-center p-3 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/10">
+              <div class="sm:col-span-1">
+                <label for="pdf-patrimonio" class="block text-sm font-medium text-gray-200">2. PDF Patrimônio Aniel</label>
+                <p class="text-xs text-gray-400 mt-0.5">Apenas .pdf</p>
+              </div>
+              <div class="sm:col-span-2">
+                <input type="file" id="pdf-patrimonio" accept=".pdf"
+                  class="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-white/20 file:text-white hover:file:bg-white/30 border border-white/20 rounded-md shadow-sm pl-0 cursor-pointer transition-all duration-200 ease-in-out bg-white/5 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-white/50">
+              </div>
+            </div>
+
+            <!-- 3. PDF Documentos de Liberação -->
+            <div class="grid sm:grid-cols-3 gap-2 sm:items-center p-3 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/10">
+              <div class="sm:col-span-1">
+                <label for="pdf-liberacao" class="block text-sm font-medium text-gray-200">3. Documentos Liberação</label>
+                <p class="text-xs text-gray-400 mt-0.5">Apenas .pdf</p>
+              </div>
+              <div class="sm:col-span-2">
+                <input type="file" id="pdf-liberacao" accept=".pdf"
+                  class="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-white/20 file:text-white hover:file:bg-white/30 border border-white/20 rounded-md shadow-sm pl-0 cursor-pointer transition-all duration-200 ease-in-out bg-white/5 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-white/50">
+              </div>
+            </div>
+
+            <!-- 4. Excel Relatório de Seriais -->
+            <div class="grid sm:grid-cols-3 gap-2 sm:items-center p-3 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/10">
+              <div class="sm:col-span-1">
+                <label for="excel-seriais" class="block text-sm font-medium text-gray-200">4. Relatório de Seriais</label>
+                <p class="text-xs text-gray-400 mt-0.5">Apenas .xls ou .xlsx</p>
+              </div>
+              <div class="sm:col-span-2">
+                <input type="file" id="excel-seriais" accept=".xlsx, .xls"
+                  class="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-white/20 file:text-white hover:file:bg-white/30 border border-white/20 rounded-md shadow-sm pl-0 cursor-pointer transition-all duration-200 ease-in-out bg-white/5 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-white/50">
+              </div>
+            </div>
+
+            <!-- 5. Excel Conferência Notas -->
+            <div class="grid sm:grid-cols-3 gap-2 sm:items-center p-3 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/10">
+              <div class="sm:col-span-1">
+                <label for="excel-nfe" class="block text-sm font-medium text-gray-200">5. Conferência de Notas</label>
+                <p class="text-xs text-gray-400 mt-0.5">Apenas .xls ou .xlsx</p>
+              </div>
+              <div class="sm:col-span-2">
+                <input type="file" id="excel-nfe" accept=".xlsx, .xls"
+                  class="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-white/20 file:text-white hover:file:bg-white/30 border border-white/20 rounded-md shadow-sm pl-0 cursor-pointer transition-all duration-200 ease-in-out bg-white/5 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-white/50">
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Rodapé do Formulário -->
+        <div class="pt-6 border-t border-white/10 flex items-center justify-end gap-x-4">
+          <button type="button" class="text-sm font-semibold leading-6 text-gray-300 hover:text-white transition-colors">Cancelar</button>
+          <button type="submit" id="submit-btn" disabled
+            class="rounded-md bg-white/20 hover:bg-white/30 border border-white/30 px-8 py-2.5 text-sm font-semibold text-white shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white opacity-50 cursor-not-allowed transition-all duration-200 backdrop-blur-sm">
+            Enviar Auditoria
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="bg-black/30 backdrop-blur-md border-t border-white/10 mt-auto">
+    <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+      <p class="text-center text-xs text-gray-400">&copy; 2026 Sistema de Auditoria Logística. Uso corporativo restrito.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Script de validação e import dos estilos -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
