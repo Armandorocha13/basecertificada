@@ -9,29 +9,49 @@ Para que o sistema salve os dados automaticamente na planilha `1AFuSWvdADrCD-EkD
 
 ```javascript
 /**
- * Script de Ponte para salvar dados do Formulário de Auditoria
+ * SCRIPT UNIVERSAL - SALVA AUDITORIAS EM ABAS ESPECÍFICAS
+ * Gerencia Volante, Físico e Perdido em uma única planilha.
  */
 function doPost(e) {
   try {
     const spreadsheetId = "1AFuSWvdADrCD-EkDabdKkVFQcT274fVAj_QwqGR54s4";
-    const sheet = SpreadsheetApp.openById(spreadsheetId).getSheets()[0];
+    const ss = SpreadsheetApp.openById(spreadsheetId);
     
-    // Parse dos dados recebidos do formulário
+    // Parse dos dados recebidos
     const data = JSON.parse(e.postData.contents);
+    const tipo = data.tipo || "Geral"; // Identifica a aba (Volante, Fisico ou Perdido)
     
-    // Ordem correta seguindo os cabeçalhos da sua planilha (Base, Nome, Serial, URL, etc)
-    sheet.appendRow([
-      data.base,                                                  // Coluna A (base)
-      data.auditor,                                               // Coluna B (nome)
-      data.serial,                                                // Coluna C (serial)
-      `=HYPERLINK("${data.links}"; "Clique aqui para ver a foto")`, // Coluna D (URL clicável)
-      data.arquivos_quant,                                        // Coluna E (quantidade)
-      data.data_envio                                             // Coluna F (data do envio)
-    ]);
+    // Seleciona a aba correta
+    let sheet = ss.getSheetByName(tipo);
+    if (!sheet) {
+      // Se a aba não existir, tenta usar a primeira
+      sheet = ss.getSheets()[0];
+    }
+    
+    // LÓGICA DE PREENCHIMENTO POR TIPO
+    if (tipo === "Perdido") {
+      // REGISTRO DE PERDIDO: [Base, Serial, Link B.O., Link Dano, Data]
+      sheet.appendRow([
+        data.base,
+        data.serial,
+        `=HYPERLINK("${data.link_bo}"; "Ver B.O. PDF")`,
+        data.link_dano ? `=HYPERLINK("${data.link_dano}"; "Ver Dano PDF")` : "N/A",
+        data.data_envio
+      ]);
+    } else {
+      // REGISTRO PADRÃO (Volante/Físico): [Base, Auditor, Serial, Link Fotos, Quant, Data]
+      sheet.appendRow([
+        data.base,
+        data.auditor,
+        data.serial,
+        `=HYPERLINK("${data.links}"; "Clique aqui para ver a foto")`,
+        data.arquivos_quant,
+        data.data_envio
+      ]);
+    }
     
     return ContentService.createTextOutput("Sucesso").setMimeType(ContentService.MimeType.TEXT);
   } catch (error) {
-    Logger.log("Erro no processamento: " + error.toString());
     return ContentService.createTextOutput("Erro: " + error.toString()).setMimeType(ContentService.MimeType.TEXT);
   }
 }
@@ -58,6 +78,29 @@ function doPost(e) {
 
 ---
 
+## Passo 4: Preparar as Abas da Planilha
+Para que o roteamento funcione, você deve criar 3 abas na parte inferior da sua planilha do Google:
+
+### Aba 1: `Volante` (e Aba 2: `Fisico`)
+Ambas seguem a mesma estrutura. Coloque estes cabeçalhos na primeira linha (**A1 até F1**):
+1. **A1:** Unidade Base
+2. **B1:** Auditor Responsável
+3. **C1:** Serial (SN)
+4. **D1:** Link das Evidências
+5. **E1:** Quant. Arquivos
+6. **F1:** Data do Envio
+
+### Aba 3: `Perdido`
+Esta aba tem campos específicos para documentos. Cabeçalhos (**A1 até E1**):
+1. **A1:** Base de Origem
+2. **B1:** Serial (SN)
+3. **C1:** Boletim de Ocorrência (PDF)
+4. **D1:** Dano ao Patrimônio (PDF)
+5. **E1:** Data do Envio
+
+---
+
 ### Dicas de Otimização:
-- **Tabela Supabase:** Como o projeto já possui o Supabase instalado, podemos futuramente espelhar esses dados em uma tabela `auditorias` para redundância.
-- **Upload de Fotos:** Se precisar salvar as fotos reais no Google Drive, o código do script acima pode ser expandido para aceitar arquivos binários (Base64).
+- **Tabela Supabase:** Como o projeto já possui o Supabase instalado, os arquivos reais ficam permanentemente salvos lá. A planilha serve como o seu "Índice de Auditoria".
+- **Acesso rápido:** Você pode congelar a primeira linha (**Ver > Congelar > 1 linha**) para que os cabeçalhos fiquem sempre visíveis ao rolar os dados.
+- **Formatação:** Recomendo centralizar as colunas e aumentar a largura das colunas de Link para facilitar a visualização.

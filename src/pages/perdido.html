@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auditoria de Perdidos | FFA Infraestrutura</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/img/logo.png" />
+    <!-- Fonte Inter do Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <!-- Estilos Globais -->
+    <script type="module">
+        import '../style.css';
+    </script>
+</head>
+
+<body class="flex flex-col min-h-screen relative overflow-x-hidden text-white bg-[#050505]">
+
+    <!-- Modal de Boas-Vindas Corporate -->
+    <div id="welcome-modal"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 transition-opacity duration-500">
+        <div class="max-w-xl w-full bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden animate-fade-in">
+            <div class="p-10">
+                <div class="w-12 h-[2px] bg-white/30 mb-8 font-light"></div>
+                <h2 class="text-3xl font-light tracking-widest text-white mb-6 uppercase">Conciliação de Perdidos</h2>
+                <p class="text-gray-300 mb-8 text-sm leading-relaxed font-light">Este módulo é destinado ao registro de ativos não localizados ou extraviados. Siga o protocolo de documentação:</p>
+
+                <div class="space-y-6 mb-10">
+                    <div class="flex items-start gap-4">
+                        <span class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-white/10 text-white text-[10px] font-bold border border-white/20 mt-0.5">1</span>
+                        <p class="text-gray-300 text-sm font-light leading-relaxed">
+                            <strong class="text-white font-medium uppercase tracking-wider text-[11px]">Identificação do Ativo:</strong><br/>
+                            Informe a <span class="text-white">Base</span> de origem e o <span class="text-white">Serial</span> do equipamento em questão.
+                        </p>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <span class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-white/10 text-white text-[10px] font-bold border border-white/20 mt-0.5">2</span>
+                        <p class="text-gray-300 text-sm font-light leading-relaxed">
+                            <strong class="text-white font-medium uppercase tracking-wider text-[11px]">Documentação Obrigatória:</strong><br/>
+                            É indispensável o anexo do <span class="text-white">Boletim de Ocorrência (PDF)</span> para validação do processo.
+                        </p>
+                    </div>
+                </div>
+
+                <button id="close-modal-btn" type="button"
+                    class="w-full rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 px-4 py-4 text-[10px] font-bold tracking-[0.3em] text-white uppercase transition-all duration-300">
+                    Entendi, iniciar registro
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Sucesso Custom -->
+    <div id="success-modal"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 transition-all duration-500 opacity-0 pointer-events-none">
+        <div class="max-w-md w-full bg-white/[0.02] border border-white/10 rounded-3xl p-12 text-center transform transition-all scale-95">
+            <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-8 border border-white/10">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <h2 class="text-2xl font-light tracking-widest text-white mb-4 uppercase">Registro Protocolado</h2>
+            <p class="text-gray-400 mb-10 text-xs font-light tracking-wider leading-relaxed">O registro de perda foi enviado para análise da gestão de ativos.</p>
+            <button id="close-success-btn" type="button"
+                class="w-full rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 px-4 py-4 text-[10px] font-bold tracking-[0.3em] text-white uppercase transition-all duration-300">
+                Retornar ao Painel
+            </button>
+        </div>
+    </div>
+
+    <!-- Background -->
+    <div class="fixed inset-0 z-[-1] pointer-events-none"
+        style="background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.95)), url('/img/premium_bg.png'); background-size: cover; background-position: center; filter: blur(10px);">
+    </div>
+
+    <!-- Cabeçalho -->
+    <header class="p-6 md:p-8 flex items-center justify-between border-b border-white/5 bg-black/20 backdrop-blur-3xl">
+        <div class="flex items-center gap-4">
+            <a href="/src/pages/selecao.html" class="p-2 hover:bg-white/5 rounded-full transition-colors group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+            </a>
+            <div class="flex flex-col">
+                <h1 class="text-xs font-bold tracking-[0.4em] text-white uppercase">Módulo Perdidos</h1>
+                <span class="text-[10px] text-gray-300 tracking-[0.2em] uppercase">Gestão de Ativos FFA</span>
+            </div>
+        </div>
+        <img src="/img/logo.png" alt="Logo FFA" class="h-6 w-auto filter brightness-0 invert opacity-60" />
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="flex-grow flex items-center justify-center p-6 md:p-12 lg:p-20">
+        <div class="max-w-4xl w-full animate-fade-in">
+            <form id="audit-form" class="space-y-12">
+                
+                <!-- Dados do Ativo -->
+                <div class="space-y-8">
+                    <div class="flex items-center gap-4">
+                        <span class="text-[10px] font-black text-white px-2 py-1 bg-white/20 rounded">01</span>
+                        <h2 class="text-xs font-bold tracking-[0.3em] text-gray-300 uppercase">Identificação do Ativo</h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <label for="nome-base" class="label-corporate">Base de Origem</label>
+                            <select id="nome-base" name="nome-base" required class="input-corporate appearance-none cursor-pointer">
+                                <option value="" disabled selected>Selecione a Unidade</option>
+                                <option value="RJ">Unidade Rio de Janeiro (RJ)</option>
+                                <option value="SP">Unidade São Paulo (SP)</option>
+                                <option value="MG">Unidade Minas Gerais (MG)</option>
+                                <option value="ES">Unidade Espírito Santo (ES)</option>
+                                <option value="PR">Unidade Paraná (PR)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="serial" class="label-corporate">Número de Serial (SN)</label>
+                            <input type="text" id="serial" name="serial" required class="input-corporate" placeholder="Ex: SN123456">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Documentação -->
+                <div class="space-y-8">
+                    <div class="flex items-center gap-4">
+                        <span class="text-[10px] font-black text-white px-2 py-1 bg-white/20 rounded">02</span>
+                        <h2 class="text-xs font-bold tracking-[0.3em] text-gray-300 uppercase">Documentação Legal</h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Boletim de Ocorrência -->
+                        <div class="bg-white/[0.02] border border-white/5 rounded-3xl p-6 space-y-4">
+                            <label class="label-corporate">Boletim de Ocorrência (PDF)</label>
+                            <div class="relative group cursor-pointer">
+                                <div class="flex flex-col items-center justify-center w-full h-32 border border-dashed border-white/10 rounded-2xl bg-white/[0.01] hover:bg-white/[0.04] transition-all duration-500">
+                                    <svg class="w-6 h-6 mb-2 text-gray-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest group-hover:text-white">Anexar B.O.</p>
+                                </div>
+                                <input type="file" id="bo-pdf" name="bo-pdf" required class="absolute inset-0 opacity-0 cursor-pointer" accept="application/pdf" />
+                            </div>
+                            <div id="bo-preview" class="text-[9px] text-gray-500 uppercase italic">Nenhum arquivo selecionado</div>
+                        </div>
+
+                        <!-- Dano ao Patrimônio -->
+                        <div class="bg-white/[0.02] border border-white/5 rounded-3xl p-6 space-y-4">
+                            <label class="label-corporate">Dano ao Patrimônio (Opcional)</label>
+                            <div class="relative group cursor-pointer">
+                                <div class="flex flex-col items-center justify-center w-full h-32 border border-dashed border-white/10 rounded-2xl bg-white/[0.01] hover:bg-white/[0.04] transition-all duration-500">
+                                    <svg class="w-6 h-6 mb-2 text-gray-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                    <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest group-hover:text-white">Anexar Formulário</p>
+                                </div>
+                                <input type="file" id="dano-pdf" name="dano-pdf" class="absolute inset-0 opacity-0 cursor-pointer" accept="application/pdf" />
+                            </div>
+                            <div id="dano-preview" class="text-[9px] text-gray-500 uppercase italic">Opcional</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rodapé Ações -->
+                <div class="flex flex-col md:flex-row items-center justify-between gap-8 pt-10 border-t border-white/5">
+                    <p class="text-[9px] text-gray-400 uppercase tracking-[0.2em] max-w-xs text-center md:text-left leading-relaxed">
+                        O envio deste registro gera um protocolo de auditoria legal.
+                    </p>
+                    <div class="flex items-center gap-6">
+                        <button type="button" onclick="history.back()" class="text-[10px] font-bold text-gray-300 hover:text-white uppercase tracking-widest transition-colors">Cancelar</button>
+                        <button type="submit" id="submit-btn" disabled class="px-12 py-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl text-[10px] font-bold text-white uppercase tracking-[0.3em] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-300">
+                            Protocolar Perda
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="p-8 border-t border-white/5">
+        <p class="text-center text-[9px] text-gray-400 uppercase tracking-[0.4em] font-light">&copy; 2026 FFA Infraestrutura - Segurança e Controle Corporativo</p>
+    </footer>
+
+    <!-- Scripts de Interatividade e Integração -->
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+        // Configuração Supabase
+        const SUPABASE_URL = 'https://gackvwuokitcfvkrgngt.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdhY2t2d3Vva2l0Y2Z2a3Jnbmd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMjg4MTMsImV4cCI6MjA4ODkwNDgxM30.h9ov4bYRfKuwBAmxPfjPDEE1b1xL4s4GuYzcgakRoKc';
+        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+        const BUCKET_NAME = 'fotos';
+
+        const form = document.getElementById('audit-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const boInput = document.getElementById('bo-pdf');
+        const danoInput = document.getElementById('dano-pdf');
+        const serialInput = document.getElementById('serial');
+        const baseSelect = document.getElementById('nome-base');
+
+        function checkValidity() {
+            const isBaseValid = baseSelect.value !== "";
+            const isSerialValid = serialInput.value.trim() !== "";
+            const isBoValid = boInput.files.length > 0;
+
+            if (isBaseValid && isSerialValid && isBoValid) {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-30', 'cursor-not-allowed');
+                submitBtn.classList.add('bg-white/10', 'hover:bg-white/20');
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-30', 'cursor-not-allowed');
+                submitBtn.classList.remove('bg-white/10', 'hover:bg-white/20');
+            }
+        }
+
+        baseSelect.addEventListener('change', checkValidity);
+        serialInput.addEventListener('input', checkValidity);
+        
+        boInput.addEventListener('change', (e) => {
+            document.getElementById('bo-preview').innerText = e.target.files[0] ? e.target.files[0].name.toUpperCase() : 'NENHUM ARQUIVO SELECIONADO';
+            checkValidity();
+        });
+
+        danoInput.addEventListener('change', (e) => {
+            document.getElementById('dano-preview').innerText = e.target.files[0] ? e.target.files[0].name.toUpperCase() : 'OPCIONAL';
+        });
+
+        // Fechar Modal Inicial
+        document.getElementById('close-modal-btn').addEventListener('click', () => {
+            document.getElementById('welcome-modal').classList.add('opacity-0', 'pointer-events-none');
+        });
+
+        document.getElementById('close-success-btn').addEventListener('click', () => {
+            location.href = '/src/pages/selecao.html';
+        });
+
+        // Envio do Formulário
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = "PROTOCOLANDO...";
+            submitBtn.disabled = true;
+
+            try {
+                const baseValue = baseSelect.value;
+                const serialValue = serialInput.value;
+                let boUrl = "";
+                let danoUrl = "";
+
+                // 1. Upload do B.O. para o Supabase
+                if (boInput.files[0]) {
+                    const file = boInput.files[0];
+                    const fileName = `bo_${Date.now()}_${file.name.replace(/\s/g, '_')}`;
+                    const { data, error } = await supabase.storage.from(BUCKET_NAME).upload(`perdidos/${baseValue}/${fileName}`, file);
+                    if (error) throw error;
+                    const { data: { publicUrl } } = supabase.storage.from(BUCKET_NAME).getPublicUrl(`perdidos/${baseValue}/${fileName}`);
+                    boUrl = publicUrl;
+                }
+
+                // 2. Upload do Dano (se houver)
+                if (danoInput.files[0]) {
+                    const file = danoInput.files[0];
+                    const fileName = `dano_${Date.now()}_${file.name.replace(/\s/g, '_')}`;
+                    const { data, error } = await supabase.storage.from(BUCKET_NAME).upload(`perdidos/${baseValue}/${fileName}`, file);
+                    if (error) throw error;
+                    const { data: { publicUrl } } = supabase.storage.from(BUCKET_NAME).getPublicUrl(`perdidos/${baseValue}/${fileName}`);
+                    danoUrl = publicUrl;
+                }
+
+                // 3. Enviar para Google Sheets (TIPO: Perdido)
+                const payload = {
+                    tipo: "Perdido",
+                    base: baseValue,
+                    serial: serialValue,
+                    link_bo: boUrl,
+                    link_dano: danoUrl,
+                    data_envio: new Date().toLocaleString('pt-BR')
+                };
+
+                const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBt9-oFXzlT1pCh4b60_iT8wLi5SnvIrLxxzh_k0EdTNO_2pG-FIfLV9v4fx6gFeKb3A/exec';
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                // Sucesso
+                const successModal = document.getElementById('success-modal');
+                successModal.classList.remove('opacity-0', 'pointer-events-none');
+                successModal.querySelector('div').classList.remove('scale-95');
+
+            } catch (error) {
+                console.error("Erro no envio:", error);
+                alert("Falha ao registrar auditoria. Verifique a conexão.");
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

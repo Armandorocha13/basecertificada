@@ -1,4 +1,4 @@
-import './style.css'
+import '/src/style.css'
 import { createClient } from '@supabase/supabase-js'
 
 // --- CONFIGURAÇÃO SUPABASE ---
@@ -198,9 +198,13 @@ document.addEventListener('DOMContentLoaded', () => {
         imageLinks.push(publicUrl);
       }
 
+      // Determinar o Tipo de Auditoria para o Google Sheets
+      const tipoAuditoria = document.title.includes('Física') ? 'Fisico' : 'Volante';
+
       // 2. Enviar dados para o Google Sheets
       submitBtn.textContent = 'Salvando na planilha...';
       const payload = {
+        tipo: tipoAuditoria,
         base: baseValue,
         auditor: auditorValue,
         serial: serialValue,
@@ -210,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
         status: "Enviado Completo"
       };
 
-      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwvp3iDcPzIlxyk15SdPJlNTiHCg6szguTT8C_dw-yfP9PWq95imu-05k8XSpLCH5neOA/exec';
+      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBt9-oFXzlT1pCh4b60_iT8wLi5SnvIrLxxzh_k0EdTNO_2pG-FIfLV9v4fx6gFeKb3A/exec';
 
       if (GOOGLE_SCRIPT_URL) {
         await fetch(GOOGLE_SCRIPT_URL, {
