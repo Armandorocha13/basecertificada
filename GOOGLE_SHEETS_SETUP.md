@@ -30,10 +30,11 @@ function doPost(e) {
     
     // LÓGICA DE PREENCHIMENTO POR TIPO
     if (tipo === "Perdido") {
-      // REGISTRO DE PERDIDO: [Base, Serial, Link B.O., Link Dano, Data]
+      // REGISTRO DE SINISTRO: [Base, Serial, Tipo, Link B.O., Link Dano, Data]
       sheet.appendRow([
         data.base,
         data.serial,
+        data.tipo_sinistro,
         `=HYPERLINK("${data.link_bo}"; "Ver B.O. PDF")`,
         data.link_dano ? `=HYPERLINK("${data.link_dano}"; "Ver Dano PDF")` : "N/A",
         data.data_envio

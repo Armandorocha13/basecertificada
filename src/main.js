@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
         status: "Enviado Completo"
       };
 
-      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBt9-oFXzlT1pCh4b60_iT8wLi5SnvIrLxxzh_k0EdTNO_2pG-FIfLV9v4fx6gFeKb3A/exec';
+      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwU7iGcUD_6rtSee_RO6uliXESdiSFBwUV6T7eaU54cFjmUQUSJq-iB3H-GeCQlfHvq3g/exec';
 
       if (GOOGLE_SCRIPT_URL) {
         await fetch(GOOGLE_SCRIPT_URL, {
