@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auditoria Volante | FFA Infraestrutura</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/img/logo.png" />
+    <!-- Fonte Inter do Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050505;
+        }
+
+        .input-corporate {
+            @apply block w-full bg-white/[0.05] backdrop-blur-md rounded-xl border border-white/20 py-3 px-4 text-white shadow-sm placeholder:text-gray-400 focus:ring-1 focus:ring-white/50 focus:border-white/50 transition-all duration-300;
+        }
+
+        .label-corporate {
+            @apply block text-[10px] font-bold tracking-[0.2em] text-gray-300 uppercase mb-2 ml-1;
+        }
+
+        /* Garantindo visibilidade das opções no Select */
+        select option {
+            @apply bg-[#1a1a1a] text-white;
+        }
+
+        /* Removendo fundo branco autofill */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus {
+            -webkit-box-shadow: 0 0 0 30px #0a0a0a inset !important;
+            -webkit-text-fill-color: white !important;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen relative overflow-x-hidden text-white">
+
+    <!-- Modal de Boas-Vindas Corporate -->
+    <div id="welcome-modal"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 transition-opacity duration-500">
+        <div class="max-w-xl w-full bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden animate-fade-in">
+            <div class="p-10">
+                <div class="w-12 h-[2px] bg-white/30 mb-8 font-light"></div>
+                <h2 class="text-3xl font-light tracking-widest text-white mb-6 uppercase">Bem-vindo à Auditoria Volante</h2>
+                <p class="text-gray-300 mb-8 text-sm leading-relaxed font-light">Siga o passo a passo abaixo para garantir que o envio da sua auditoria seja válido e processado rapidamente:</p>
+
+                <div class="space-y-6 mb-10">
+                    <div class="flex items-start gap-4">
+                        <span class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-white/10 text-white text-[10px] font-bold border border-white/20 mt-0.5">1</span>
+                        <p class="text-gray-300 text-sm font-light leading-relaxed">
+                            <strong class="text-white font-medium uppercase tracking-wider text-[11px]">Identificação:</strong><br/>
+                            Selecione o <span class="text-white">Nome da Base</span> exato e o <span class="text-white">Responsável</span> do equipamento.
+                        </p>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <span class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-white/10 text-white text-[10px] font-bold border border-white/20 mt-0.5">2</span>
+                        <p class="text-gray-300 text-sm font-light leading-relaxed">
+                            <strong class="text-white font-medium uppercase tracking-wider text-[11px]">Evidências Fotográficas:</strong><br/>
+                            Tire fotos nítidas do equipamento que está em posse do técnico responsável.
+                        </p>
+                    </div>
+                </div>
+
+                <button id="close-modal-btn" type="button"
+                    class="w-full rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 px-4 py-4 text-[10px] font-bold tracking-[0.3em] text-white uppercase transition-all duration-300">
+                    Entendi, começar preenchimento
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Sucesso Custom -->
+    <div id="success-modal"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 transition-all duration-500 opacity-0 pointer-events-none">
+        <div class="max-w-md w-full bg-white/[0.02] border border-white/10 rounded-3xl p-12 text-center transform transition-all scale-95">
+            <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-8 border border-white/10">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <h2 class="text-2xl font-light tracking-widest text-white mb-4 uppercase">Envio Confirmado</h2>
+            <p class="text-gray-400 mb-10 text-xs font-light tracking-wider leading-relaxed">Os dados da auditoria foram processados e registrados no sistema de gestão corporativo.</p>
+            <button id="close-success-btn" type="button"
+                class="w-full rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 px-4 py-4 text-[10px] font-bold tracking-[0.3em] text-white uppercase transition-all duration-300">
+                Retornar ao Painel
+            </button>
+        </div>
+    </div>
+
+    <!-- Background -->
+    <div class="fixed inset-0 z-[-1] pointer-events-none"
+        style="background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.95)), url('/img/premium_bg.png'); background-size: cover; background-position: center; filter: blur(10px);">
+    </div>
+
+    <!-- Cabeçalho -->
+    <!-- Cabeçalho -->
+    <header class="p-6 md:p-8 flex items-center justify-between border-b border-white/5 bg-black/20 backdrop-blur-3xl">
+        <div class="flex items-center gap-4">
+            <a href="/src/pages/selecao.html" class="p-2 hover:bg-white/5 rounded-full transition-colors group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-500 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+            </a>
+            <div class="flex flex-col">
+                <h1 class="text-xs font-bold tracking-[0.4em] text-white uppercase">Formulário de Auditoria</h1>
+                <span class="text-[10px] text-gray-400 tracking-[0.2em] uppercase">Módulo FFA Infraestrutura</span>
+            </div>
+        </div>
+        <img src="/img/logo.png" alt="Logo FFA" class="h-6 w-auto filter brightness-0 invert opacity-60" />
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="flex-grow flex items-center justify-center p-6 md:p-12 lg:p-20">
+        <div class="max-w-4xl w-full animate-fade-in">
+            <form id="audit-form" class="space-y-12">
+                
+                <!-- Dados Gerais -->
+                <div class="space-y-8">
+                    <div class="flex items-center gap-4">
+                        <span class="text-[10px] font-black text-white px-2 py-1 bg-white/20 rounded">01</span>
+                        <h2 class="text-xs font-bold tracking-[0.3em] text-gray-300 uppercase">Dados da Auditoria</h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <label for="nome-base" class="label-corporate">Nome da Base</label>
+                            <select id="nome-base" name="nome-base" required class="input-corporate appearance-none cursor-pointer">
+                                <option value="" disabled selected>Selecione a Unidade</option>
+                                <option value="RJ">Unidade Rio de Janeiro (RJ)</option>
+                                <option value="SP">Unidade São Paulo (SP)</option>
+                                <option value="MG">Unidade Minas Gerais (MG)</option>
+                                <option value="ES">Unidade Espírito Santo (ES)</option>
+                                <option value="PR">Unidade Paraná (PR)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="auditor" class="label-corporate">Responsável (Auditor)</label>
+                            <input type="text" id="auditor" name="auditor" required class="input-corporate" placeholder="Nome Completo">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ativos e Evidências -->
+                <div class="space-y-8">
+                    <div class="flex items-center gap-4">
+                        <span class="text-[10px] font-black text-white px-2 py-1 bg-white/20 rounded">02</span>
+                        <h2 class="text-xs font-bold tracking-[0.3em] text-gray-300 uppercase">Identificação e Evidências</h2>
+                    </div>
+                    
+                    <div class="bg-white/[0.02] border border-white/5 rounded-3xl p-8 space-y-8">
+                        <div>
+                            <label for="serial" class="label-corporate">Número de Serial (SN)</label>
+                            <input type="text" id="serial" name="serial" required class="input-corporate" placeholder="Ex: SN123456">
+                        </div>
+                        
+                        <div>
+                            <label class="label-corporate">Evidências Fotográficas</label>
+                            <div id="dropzone" class="group relative flex flex-col items-center justify-center w-full h-44 border border-dashed border-white/10 rounded-2xl bg-white/[0.01] hover:bg-white/[0.04] hover:border-white/30 transition-all duration-500 cursor-pointer">
+                                <div class="flex flex-col items-center justify-center p-6 text-center">
+                                    <svg class="w-8 h-8 mb-4 text-gray-400 group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    <p class="text-[10px] font-bold tracking-widest text-gray-400 group-hover:text-white uppercase transition-colors">Arraste ou clique para anexar evidências</p>
+                                </div>
+                                <input type="file" id="evidencias" name="evidencias" class="hidden" accept="image/*" />
+                            </div>
+                            <!-- Preview de Lista -->
+                            <div id="file-list-container" class="mt-6 hidden">
+                                <ul id="file-list" class="grid grid-cols-2 md:grid-cols-4 gap-4"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rodapé Ações -->
+                <div class="flex flex-col md:flex-row items-center justify-between gap-8 pt-10 border-t border-white/5">
+                    <p class="text-[9px] text-gray-400 uppercase tracking-[0.2em] max-w-xs text-center md:text-left leading-relaxed">
+                        Certifique-se de que todos os dados estão corretos antes de enviar.
+                    </p>
+                    <div class="flex items-center gap-6">
+                        <button type="button" onclick="history.back()" class="text-[10px] font-bold text-gray-300 hover:text-white uppercase tracking-widest transition-colors">Cancelar</button>
+                        <button type="submit" id="submit-btn" disabled class="px-12 py-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl text-[10px] font-bold text-white uppercase tracking-[0.3em] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-300">
+                            Enviar Auditoria
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="p-8 border-t border-white/5">
+        <p class="text-center text-[9px] text-gray-600 uppercase tracking-[0.4em] font-light">&copy; 2026 FFA Infraestrutura - Segurança e Controle Corporativo</p>
+    </footer>
+
+    <!-- Script Principal -->
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>

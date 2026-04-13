@@ -33,9 +33,9 @@ async function comprimirImagem(arquivo, larguraMaxima = 1200, qualidade = 0.7) {
         ctx.drawImage(img, 0, 0, width, height);
 
         canvas.toBlob((blob) => {
-          resolve(new File([blob], arquivo.name.replace(/\.[^/.]+$/, "") + ".jpg", { 
-            type: 'image/jpeg', 
-            lastModified: Date.now() 
+          resolve(new File([blob], arquivo.name.replace(/\.[^/.]+$/, "") + ".jpg", {
+            type: 'image/jpeg',
+            lastModified: Date.now()
           }));
         }, 'image/jpeg', qualidade);
       };
@@ -94,12 +94,12 @@ document.addEventListener('DOMContentLoaded', () => {
     dropzone.addEventListener('drop', (e) => {
       e.preventDefault();
       dropzone.querySelector('div').classList.remove('border-white/60', 'bg-white/20');
-      
+
       // Bloqueio de múltiplas fotos: pegar apenas a primeira
       const dt = new DataTransfer();
       dt.items.add(e.dataTransfer.files[0]);
       fileInput.files = dt.files;
-      
+
       updateFileList();
       checkFormValidity();
     });
@@ -176,10 +176,10 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.textContent = 'Comprimindo e enviando...';
 
         const file = files[0]; // Apenas a primeira foto (limite de 1)
-        
+
         // Comprimir antes de enviar
         const arquivoComprimido = await comprimirImagem(file);
-        
+
         const fileName = `${Date.now()}-${arquivoComprimido.name.replace(/\s/g, '_')}`;
         const { data, error } = await supabase.storage
           .from(BUCKET_NAME)
@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         status: "Enviado Completo"
       };
 
-      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwiu5WvIJeHE0tmRk2I1_FH3Bh1woj_yNDSUmlOVomXQZPo6JWRQ542O5d0KCK4dkVrbA/exec';
+      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwvp3iDcPzIlxyk15SdPJlNTiHCg6szguTT8C_dw-yfP9PWq95imu-05k8XSpLCH5neOA/exec';
 
       if (GOOGLE_SCRIPT_URL) {
         await fetch(GOOGLE_SCRIPT_URL, {

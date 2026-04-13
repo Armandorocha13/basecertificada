@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de Auditoria Logística</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/img/logo.png" />
+    <!-- Fonte Inter do Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen relative overflow-hidden text-white bg-black">
+
+    <!-- Imagem de Fundo Premium -->
+    <div class="fixed inset-0 z-[-1] pointer-events-none"
+        style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('/img/premium_bg.png'); background-size: cover; background-position: center; background-repeat: no-repeat; filter: blur(4px); transform: scale(1.1);">
+    </div>
+
+    <!-- Conteúdo Centralizado -->
+    <main class="flex-grow flex flex-col items-center justify-center p-4">
+        <div class="flex flex-col items-center animate-in fade-in zoom-in duration-700">
+            <!-- Logo -->
+            <div class="mb-8 p-4 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 shadow-2xl">
+                <img src="/img/logo.png" alt="Logo FFA"
+                    class="h-24 w-auto object-contain filter brightness-0 invert" />
+            </div>
+
+            <!-- Título -->
+            <h1 class="text-4xl md:text-6xl font-black tracking-tighter text-white mb-2 text-center">
+                AUDITORIA <span class="text-gray-400">LOGÍSTICA</span>
+            </h1>
+            <p class="text-gray-400 text-sm md:text-base mb-12 tracking-[0.2em] font-medium uppercase">
+                Portal de Gestão FFA Infraestrutura
+            </p>
+
+            <!-- Botão Acessar -->
+            <a href="/src/pages/audit.html"
+                class="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-200 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white/50 shadow-xl backdrop-blur-md overflow-hidden">
+                <span class="relative z-10 flex items-center gap-2">
+                    ACESSAR SISTEMA
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                </span>
+                <div class="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+            </a>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="p-6 text-center text-xs text-gray-500 uppercase tracking-widest">
+        &copy; 2026 FFA Infraestrutura - Feito por AeroCode
+    </footer>
+
+    <!-- Script de import dos estilos -->
+    <script type="module">
+        import '../style.css';
+    </script>
+</body>
+
+</html>

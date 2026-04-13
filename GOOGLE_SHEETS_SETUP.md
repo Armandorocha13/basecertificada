@@ -19,15 +19,14 @@ function doPost(e) {
     // Parse dos dados recebidos do formulário
     const data = JSON.parse(e.postData.contents);
     
-    // Colunas esperadas: Data, Base, Auditor, Serial, Qtd Fotos, Status, Links das Imagens
+    // Ordem correta seguindo os cabeçalhos da sua planilha (Base, Nome, Serial, URL, etc)
     sheet.appendRow([
-      new Date().toLocaleString('pt-BR'), 
-      data.base, 
-      data.auditor, 
-      data.serial, 
-      data.arquivos_quant,
-      data.status,
-      data.links // <--- Adicionada a coluna de links aqui
+      data.base,                                                  // Coluna A (base)
+      data.auditor,                                               // Coluna B (nome)
+      data.serial,                                                // Coluna C (serial)
+      `=HYPERLINK("${data.links}"; "Clique aqui para ver a foto")`, // Coluna D (URL clicável)
+      data.arquivos_quant,                                        // Coluna E (quantidade)
+      data.data_envio                                             // Coluna F (data do envio)
     ]);
     
     return ContentService.createTextOutput("Sucesso").setMimeType(ContentService.MimeType.TEXT);
