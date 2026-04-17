@@ -180,7 +180,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // Comprimir antes de enviar
         const arquivoComprimido = await comprimirImagem(file);
 
-        const fileName = `${Date.now()}-${arquivoComprimido.name.replace(/\s/g, '_')}`;
+        // Função para sanitizar o nome do arquivo
+        const sanitizeFileName = (name) => {
+          return name
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+            .replace(/\s+/g, '_')           // Substitui espaços por _
+            .replace(/[^a-zA-Z0-9._-]/g, ''); // Remove caracteres especiais
+        };
+
+        const fileName = `${Date.now()}-${sanitizeFileName(arquivoComprimido.name)}`;
         const { data, error } = await supabase.storage
           .from(BUCKET_NAME)
           .upload(`auditoria/${baseValue}/${fileName}`, arquivoComprimido, {

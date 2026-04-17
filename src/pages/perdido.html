@@ -258,13 +258,21 @@
             try {
                 const baseValue = baseSelect.value;
                 const serialValue = serialInput.value;
+                // Função para sanitizar o nome do arquivo
+                const sanitizeFileName = (name) => {
+                  return name
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+                    .replace(/\s+/g, '_')           // Substitui espaços por _
+                    .replace(/[^a-zA-Z0-9._-]/g, ''); // Remove caracteres especiais
+                };
                 let boUrl = "";
                 let danoUrl = "";
 
                 // 1. Upload do B.O. para o Supabase
                 if (boInput.files[0]) {
                     const file = boInput.files[0];
-                    const fileName = `bo_${Date.now()}_${file.name.replace(/\s/g, '_')}`;
+                    const fileName = `bo_${Date.now()}_${sanitizeFileName(file.name)}`;
                     const { data, error } = await supabase.storage.from(BUCKET_NAME).upload(`perdidos/${baseValue}/${fileName}`, file);
                     if (error) throw error;
                     const { data: { publicUrl } } = supabase.storage.from(BUCKET_NAME).getPublicUrl(`perdidos/${baseValue}/${fileName}`);
@@ -274,7 +282,7 @@
                 // 2. Upload do Dano (se houver)
                 if (danoInput.files[0]) {
                     const file = danoInput.files[0];
-                    const fileName = `dano_${Date.now()}_${file.name.replace(/\s/g, '_')}`;
+                    const fileName = `dano_${Date.now()}_${sanitizeFileName(file.name)}`;
                     const { data, error } = await supabase.storage.from(BUCKET_NAME).upload(`perdidos/${baseValue}/${fileName}`, file);
                     if (error) throw error;
                     const { data: { publicUrl } } = supabase.storage.from(BUCKET_NAME).getPublicUrl(`perdidos/${baseValue}/${fileName}`);
